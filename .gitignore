@@ -1,0 +1,7 @@
+# recommend_api 내부의 모든 파일 무시
+recommend_api/*
+
+# 예외: .py 파일, requirements.txt, dockerfile은 추적
+!recommend_api/*.py
+!recommend_api/requirements.txt
+!recommend_api/dockerfile

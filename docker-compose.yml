@@ -1,0 +1,44 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      - recommend_api
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+
+  fastapi:
+    build:
+      context: ./recommend_api
+    container_name: fastapi-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./recommend_api:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - ./recommend_api/.env
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
